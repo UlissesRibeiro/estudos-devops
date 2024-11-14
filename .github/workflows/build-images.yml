@@ -3,28 +3,38 @@ name: Build de image Docker
 on:
   pull_request:
     branches:
-     - testes
+     - master
 
 jobs:
   Build:
     runs-on: ubuntu-latest
-    uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Install Docker
-      run: |
-        apt-get update
-        apt-get install curl -y
-        curl -fsSl https://get.docker.com | sh
+      - name: Install Docker
+        run: |
+          #apt-get update
+          sudo apt-get install curl -y
+          sudo curl -fsSl https://get.docker.com | sh
 
-    - name: Build image Docker
-      run: |
-        cd desafio-02/nginx/
-        docker buil -t nginx-custom:1.0 .
-        docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+      - name: Build image Docker
+        run: |
+          cd desafio-02/nginx/
+          docker build -t nginx-custom:1.0 .
+          docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
 
-  Testes:
-    runs-on: ubuntu-latest
-    uses: actions/checkout@v3
+      - name: Teste de conexão
+        run: |
+          sleep 5
+          curl -lv http://localhost:8070
 
-    - name: Teste de conexão
-      run: curl -lv http://localhost:8070
+  #Testes:
+  #  runs-on: ubuntu-latest
+  #  needs: Build
+  #  steps:
+  #    - name: Teste de conexão
+  #      uses: actions/checkout@v3#
+
+  #    - name: Teste de conexão
+  #      run: curl -lv http://localhost:8070
