@@ -1,0 +1,30 @@
+name: Build de image Docker
+
+on:
+  pull_request:
+    branches:
+     - testes
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    uses: actions/checkout@v3
+
+    - name: Install Docker
+      run: |
+        apt-get update
+        apt-get install curl -y
+        curl -fsSl https://get.docker.com | sh
+
+    - name: Build image Docker
+      run: |
+        cd desafio-02/nginx/
+        docker buil -t nginx-custom:1.0 .
+        docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+
+  Testes:
+    runs-on: ubuntu-latest
+    uses: actions/checkout@v3
+
+    - name: Teste de conexão
+      run: curl -lv http://localhost:8070
