@@ -14,7 +14,7 @@ jobs:
 
       - name: Install Docker
         run: |
-          apt-get update
+          #apt-get update
           apt-get install curl -y
           curl -fsSl https://get.docker.com | sh
 
