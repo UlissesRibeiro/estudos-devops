@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           tags: nginx-custom:1.0
-          outputs: type=docker,dest;/tmp/nginx-custom.tar
+          outputs: type=docker,dest=/tmp/nginx-custom.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
