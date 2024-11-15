@@ -67,7 +67,7 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.SERVER_HOST }}
-          cd /
+          cd /home/ubuntu
           git clone git@github.com:UlissesRibeiro/estudos-devops.git
           #git pull
           cd estudos-devops/desafio-02/nginx/
