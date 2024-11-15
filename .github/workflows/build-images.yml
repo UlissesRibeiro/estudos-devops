@@ -53,7 +53,8 @@ jobs:
           push: true
           tags: ulissestark/nginx-custom:1.0
 
-
+        #necessario liberar rede no security group, foi usado 0.0.0.0/0 não recomendado, apenas 
+        #para testes
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
@@ -67,7 +68,8 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.SERVER_HOST }}
           cd /
-          git pull
+          git clone git@github.com:UlissesRibeiro/estudos-devops.git
+          #git pull
           cd estudos-devops/desafio-02/nginx/
           docker build -t nginx-custom:1.0 .
           docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
