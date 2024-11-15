@@ -6,7 +6,7 @@ on:
      - master
 
 jobs:
-  Build:
+  build:
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -17,67 +17,94 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install Docker
-        run: |
-          #apt-get update
-          sudo apt-get install curl -y
-          sudo curl -fsSl https://get.docker.com | sh
+      #removendo install docker
+      #- name: Install Docker
+      #  run: |
+      #    #apt-get update
+      #    sudo apt-get install curl -y
+      #    sudo curl -fsSl https://get.docker.com | sh
 
       - name: Build image Docker
         run: |
           cd desafio-02/nginx/
           docker build -t nginx-custom:1.0 .
-          docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+          #docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+        #empacotar image Docker
+      - name: Build and export
+        uses: docker/build-push-action@v6
+        with:
+          tags: nginx-custom:1.0
+          outputs: type=docker,dest;/tmp/nginx-custom.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nginx-custom
+          path: /tmp/nginx-custom.tar
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nginx-custom
+          path: /tmp
+
+      - name: Load image
+        run: |
+          docker load --input /tmp/nginx-custtom.tar
 
       - name: Teste de conexão
         run: |
+          docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
           sleep 5
           curl -lv http://localhost:8070
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      #- name: Log in to Docker Hub
+      #  uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      #  with:
+      #    username: ${{ secrets.DOCKER_USERNAME }}
+      #    password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ulissestark/nginx-custom
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+#        with:
+#          images: ulissestark/nginx-custom
 
-      - name: Build and push docker image to registry
-        uses: docker/build-push-action@v5
-        with:
-          context: desafio-02/nginx/
-          push: true
-          tags: ulissestark/nginx-custom:1.0
+#      - name: Build and push docker image to registry
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: desafio-02/nginx/
+#          push: true
+#          tags: ulissestark/nginx-custom:1.0
 
         #necessario liberar rede no security group, foi usado 0.0.0.0/0 não recomendado, apenas 
         #para testes
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY}}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+#      - name: Set up SSH key
+#        run: |
+#          mkdir -p ~/.ssh
+#          echo "${{ secrets.SERVER_SSH_KEY}}" > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
           
-          ssh-keyscan -p 22 ${{secrets.SERVER_HOST}} >> ~/.ssh/known_hosts
-          sudo apt-get install sshpass -y
+#          ssh-keyscan -p 22 ${{secrets.SERVER_HOST}} >> ~/.ssh/known_hosts
+#          sudo apt-get install sshpass -y
 
-      - name: Deploy to server
-        run: |
-            ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.SERVER_HOST }} <<EOF
-              cd /home/ubuntu/
-              if [ ! -d "estudos-devops" ]; then
-                git clone git@github.com:UlissesRibeiro/estudos-devops.git
-              else
-                cd estudos-devops
-                git pull
-              fi
-              cd estudos-devops/desafio-02/nginx/
-              docker build -t nginx-custom:1.0 .
-              docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
-            EOF
+#      - name: Deploy to server
+#        run: |
+#            ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.SERVER_HOST }} <<EOF
+#              cd /home/ubuntu/
+#              if [ ! -d "estudos-devops" ]; then
+#                git clone git@github.com:UlissesRibeiro/estudos-devops.git
+#              else
+#                cd estudos-devops
+#                git pull
+#              fi
+#              cd estudos-devops/desafio-02/nginx/
+#              docker build -t nginx-custom:1.0 .
+#              docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+#            EOF
         
 
       #- name: Generate artifact attestation
