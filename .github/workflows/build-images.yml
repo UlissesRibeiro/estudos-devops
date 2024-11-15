@@ -66,13 +66,19 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.SERVER_HOST }}
-          cd /home/ubuntu/
-          git clone git@github.com:UlissesRibeiro/estudos-devops.git
-          #git pull
-          cd estudos-devops/desafio-02/nginx/
-          docker build -t nginx-custom:1.0 .
-          docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+            ssh -i ~/.ssh/id_rsa ubuntu@${{ secrets.SERVER_HOST }} <<EOF
+              cd /home/ubuntu/
+              if [ ! -d "estudos-devops" ]; then
+                git clone git@github.com:UlissesRibeiro/estudos-devops.git
+              else
+                cd estudos-devops
+                git pull
+              fi
+              cd estudos-devops/desafio-02/nginx/
+              docker build -t nginx-custom:1.0 .
+              docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+            EOF
+        
 
       #- name: Generate artifact attestation
       #  uses: actions/attest-build-provenance@v1
