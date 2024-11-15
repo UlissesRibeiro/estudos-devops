@@ -30,11 +30,9 @@ jobs:
           docker build -t nginx-custom:1.0 .
           #docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
         #empacotar image Docker
-      - name: Build and export
-        uses: docker/build-push-action@v6
-        with:
-          tags: nginx-custom:1.0
-          outputs: type=docker,dest=/tmp/nginx-custom.tar
+      - name: Export Docker image as .tar
+        run: |
+          docker save nginx-custom:1.0 -o /tmp/nginx-custom.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
