@@ -53,6 +53,25 @@ jobs:
           push: true
           tags: ulissestark/nginx-custom:1.0
 
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY}}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 22 ${{secrets.SERVER_HOST}} >> ~/.ssh/known_hosts
+          sudo apt-get install sshpass -y
+
+      - name: Deploy to server
+        run: |
+          cd ~/.ssh
+          ssh -i id_rsa ubuntu@ec2-34-234-172-22.compute-1.amazonaws.com
+          cd /
+          git pull
+          cd estudos-devops/desafio-02/nginx/
+          docker build -t nginx-custom:1.0 .
+          docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+
       #- name: Generate artifact attestation
       #  uses: actions/attest-build-provenance@v1
       #  with:
