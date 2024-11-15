@@ -17,18 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      #removendo install docker
-      #- name: Install Docker
-      #  run: |
-      #    #apt-get update
-      #    sudo apt-get install curl -y
-      #    sudo curl -fsSl https://get.docker.com | sh
-
       - name: Build image Docker
         run: |
           cd desafio-02/nginx/
           docker build -t nginx-custom:1.0 .
-          #docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
+
         #empacotar image Docker
       - name: Export Docker image as .tar
         run: |
