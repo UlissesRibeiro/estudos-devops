@@ -68,6 +68,9 @@ jobs:
         with:
           images: ulissestark/nginx-custom
 
+      - name: acessando path
+        run: |
+          cd desafio-02/nginx/  
       - name: Build and push docker image to registry
         uses: docker/build-push-action@v5
         with:
