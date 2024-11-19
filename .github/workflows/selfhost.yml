@@ -1,0 +1,6 @@
+jobs:
+  test-runner:
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: Testar conexão
+        run: echo "Self-hosted runner está funcionando!"
