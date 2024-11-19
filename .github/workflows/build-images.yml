@@ -3,6 +3,9 @@ name: Build de image Docker
 on:
   push:
     branches:
+      - development
+  pull_request:
+    branches:
      - development
 
 jobs:
