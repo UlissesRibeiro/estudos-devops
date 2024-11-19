@@ -51,6 +51,7 @@ jobs:
           docker run -dit --name nginx -p 8070:80 nginx-custom:1.0
           sleep 5
           curl -lv http://localhost:8070
+          echo "Funcionando #PAZ"
     
   #push_image:
   #  runs-on: ubuntu-latest
