@@ -1,7 +1,7 @@
 name: Build de image Docker
 
 on:
-  pull_request:
+  push:
     branches:
      - development
 
