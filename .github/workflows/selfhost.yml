@@ -1,3 +1,9 @@
+name: Test self-hosted AWS EC2
+
+on:
+  push:
+    branches:
+      - master
 jobs:
   test-runner:
     runs-on: [self-hosted, linux]
