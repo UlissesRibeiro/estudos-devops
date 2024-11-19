@@ -12,7 +12,8 @@ A sua empresa possui uma aplicação web básica, e seu objetivo é automatizar 
 
 - Crie um Dockerfile para a aplicação, seguindo as boas práticas (otimize o tamanho e a organização das instruções).
 A aplicação deve ser configurada para rodar em um contêiner e ser facilmente executável em qualquer ambiente.
-Pipeline CI/CD
+
+### Pipeline CI/CD
 
 - Configure uma pipeline de CI/CD usando GitHub Actions ou GitLab CI para automatizar o processo.
 
