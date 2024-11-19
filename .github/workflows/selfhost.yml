@@ -10,3 +10,20 @@ jobs:
     steps:
       - name: Testar conexão
         run: echo "Self-hosted runner está funcionando!"
+
+      - name: Configurar chave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_PRIV_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+      - name: Clonar ou puxar repositório
+        run: |
+          cd /home/ubuntu/
+          if [ ! -d "estudos-devops" ]; then
+            git clone git@github.com:UlissesRibeiro/estudos-devops.git
+          else
+            cd estudos-devops
+            git pull origin master
+          fi
