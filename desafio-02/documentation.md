@@ -8,15 +8,8 @@
 - runners-images https://github.com/actions/runner-images
 
 
-<p>Por mais incrivel que pareça a documentação oficial tem erros, na parte do Push das images, o que me fez tentar rodar o workflow umas 14 vezez até ter sucesso no stop de Push da image, faltando agora fazer o deploy em um ambiente de testes, acredito que seria utilizando uma cloud, mas acredito que usando uma VM local atrelada ao repositorio via ssh funcione, irei testar.</p>
 
-<p>Resolvi dividir o workflow em jos, como seria a melhor pratica, então tive que pesquisar como fazer para re-utilizar a image feita no build no job seguinte, então encontrei na documentação oficial como fazer tal processo, que foi realizado com sucesso, tendo agora 2 jobs:
-
-- build
-- teste
-</p>
-
-## Crição do Dockerfile
+## Criação do Dockerfile
 
 O Dockerfile foi criado da forma mais simples possivel, disponibilizado no path <b>nginx</b> :
 
