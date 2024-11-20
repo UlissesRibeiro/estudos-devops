@@ -23,8 +23,7 @@ A aplicação deve ser configurada para rodar em um contêiner e ser facilmente 
 - Push da Imagem: Após o build e testes, envie a imagem para um repositório de contêineres (Docker Hub, GitHub Container Registry, etc.).
 - Deploy: A pipeline deve fazer o deploy da aplicação em um ambiente de teste, utilizando docker-compose para simplificar a configuração.
 Configuração do Ambiente com Docker Compose
-
-Crie um arquivo docker-compose.yml para definir os serviços da aplicação (por exemplo, back-end, banco de dados).
+- Crie um arquivo docker-compose.yml para definir os serviços da aplicação (por exemplo, back-end, banco de dados).
 Configure as redes e volumes no Docker Compose para que os contêineres possam se comunicar.
 
 ### Documentação
